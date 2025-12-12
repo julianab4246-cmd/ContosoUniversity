@@ -1,5 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using ContosoUniversity.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Xml;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,10 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<SchoolContext>();
-    DbInitializer.Initialize(context);
+
+    context.Database.Migrate();
+
+    XmlSeeder.SeedFromXml(context, "Data/Seed/initial-data.xml");
 }
 
 if (!app.Environment.IsDevelopment())
@@ -25,11 +29,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
-
 app.MapRazorPages();
-
 app.Run();
