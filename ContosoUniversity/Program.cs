@@ -26,6 +26,8 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
+builder.Services.AddHealthChecks();
+app.MapHealthChecks("/healthz");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
